@@ -1,0 +1,6 @@
+gcp_project_id         = "your-gcp-project-id"
+gcp_region             = "us-central1"
+pagerduty_schedule_id  = "your-pagerduty-schedule-id"
+slack_channel          = "#roee-tests"
+timezone               = "Asia/Jerusalem"
+log_level              = "info"
