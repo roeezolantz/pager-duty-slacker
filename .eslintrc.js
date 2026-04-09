@@ -9,7 +9,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2022,
     sourceType: 'module',
-    project: './tsconfig.json',
+    project: './tsconfig.eslint.json',
   },
   plugins: ['@typescript-eslint', 'jest'],
   env: {
@@ -17,6 +17,7 @@ module.exports = {
     jest: true,
     es2022: true,
   },
+  ignorePatterns: ['.eslintrc.js', 'jest.config.js'],
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/no-explicit-any': 'error',

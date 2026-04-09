@@ -36,7 +36,7 @@ RUN addgroup -g 1001 -S nodejs && \
 COPY package.json pnpm-lock.yaml ./
 
 # Install production dependencies only
-RUN pnpm install --prod --frozen-lockfile
+RUN pnpm install --prod
 
 # Copy built application from builder
 COPY --from=builder /app/dist ./dist
