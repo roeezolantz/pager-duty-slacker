@@ -94,17 +94,13 @@ describe('On-Call Notification Integration', () => {
           usergroups: [{ id: 'UG123', handle: 'oncall' }],
         });
 
-      nock('https://slack.com')
-        .post('/api/usergroups.users.update')
-        .reply(200, { ok: true });
+      nock('https://slack.com').post('/api/usergroups.users.update').reply(200, { ok: true });
 
-      nock('https://slack.com')
-        .post('/api/chat.postMessage')
-        .reply(200, {
-          ok: true,
-          ts: '1234567890.123456',
-          channel: '#test-channel',
-        });
+      nock('https://slack.com').post('/api/chat.postMessage').reply(200, {
+        ok: true,
+        ts: '1234567890.123456',
+        channel: '#test-channel',
+      });
 
       const response = await request(app).post('/notify');
 
@@ -114,25 +110,21 @@ describe('On-Call Notification Integration', () => {
       expect(response.body).toHaveProperty('messageTimestamp');
     });
 
-    it(
-      'should handle errors gracefully',
-      async () => {
-        const scheduleId = process.env.PAGERDUTY_SCHEDULE_ID;
+    it('should handle errors gracefully', async () => {
+      const scheduleId = process.env.PAGERDUTY_SCHEDULE_ID;
 
-        nock('https://api.pagerduty.com')
-          .get(`/schedules/${scheduleId}/users`)
-          .query(true)
-          .times(4)
-          .reply(500, { error: { message: 'Internal Server Error' } });
+      nock('https://api.pagerduty.com')
+        .get(`/schedules/${scheduleId}/users`)
+        .query(true)
+        .times(4)
+        .reply(500, { error: { message: 'Internal Server Error' } });
 
-        const response = await request(app).post('/notify');
+      const response = await request(app).post('/notify');
 
-        expect(response.status).toBe(500);
-        expect(response.body).toHaveProperty('success', false);
-        expect(response.body).toHaveProperty('error');
-      },
-      15000,
-    );
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty('success', false);
+      expect(response.body).toHaveProperty('error');
+    }, 15000);
   });
 
   describe('404 handler', () => {

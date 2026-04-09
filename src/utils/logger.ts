@@ -40,15 +40,16 @@ export class Logger {
   }
 
   error(message: string, error?: Error | unknown, meta?: Record<string, unknown>): void {
-    const errorMeta = error instanceof Error
-      ? {
-          error: {
-            message: error.message,
-            stack: error.stack,
-            name: error.name,
-          },
-        }
-      : { error };
+    const errorMeta =
+      error instanceof Error
+        ? {
+            error: {
+              message: error.message,
+              stack: error.stack,
+              name: error.name,
+            },
+          }
+        : { error };
 
     this.log('error', message, { ...errorMeta, ...meta });
   }

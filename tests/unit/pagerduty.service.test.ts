@@ -49,45 +49,37 @@ describe('PagerDutyService', () => {
       expect(result).toEqual(futureEntry);
     });
 
-    it(
-      'should throw error when no entries found',
-      async () => {
-        nock('https://api.pagerduty.com')
-          .get(`/schedules/${mockConfig.pagerduty.scheduleId}/users`)
-          .query(true)
-          .times(4)
-          .reply(200, { users: [] });
+    it('should throw error when no entries found', async () => {
+      nock('https://api.pagerduty.com')
+        .get(`/schedules/${mockConfig.pagerduty.scheduleId}/users`)
+        .query(true)
+        .times(4)
+        .reply(200, { users: [] });
 
-        nock('https://api.pagerduty.com')
-          .get(`/schedules/${mockConfig.pagerduty.scheduleId}`)
-          .query(true)
-          .times(4)
-          .reply(200, {
-            schedule: {
-              final_schedule: {
-                rendered_schedule_entries: [],
-              },
+      nock('https://api.pagerduty.com')
+        .get(`/schedules/${mockConfig.pagerduty.scheduleId}`)
+        .query(true)
+        .times(4)
+        .reply(200, {
+          schedule: {
+            final_schedule: {
+              rendered_schedule_entries: [],
             },
-          });
+          },
+        });
 
-        await expect(service.getNextOnCallShift()).rejects.toThrow(PagerDutyError);
-      },
-      15000,
-    );
+      await expect(service.getNextOnCallShift()).rejects.toThrow(PagerDutyError);
+    }, 15000);
 
-    it(
-      'should handle API errors gracefully',
-      async () => {
-        nock('https://api.pagerduty.com')
-          .get(`/schedules/${mockConfig.pagerduty.scheduleId}/users`)
-          .query(true)
-          .times(4)
-          .reply(500, { error: { message: 'Internal Server Error' } });
+    it('should handle API errors gracefully', async () => {
+      nock('https://api.pagerduty.com')
+        .get(`/schedules/${mockConfig.pagerduty.scheduleId}/users`)
+        .query(true)
+        .times(4)
+        .reply(500, { error: { message: 'Internal Server Error' } });
 
-        await expect(service.getNextOnCallShift()).rejects.toThrow(PagerDutyError);
-      },
-      15000,
-    );
+      await expect(service.getNextOnCallShift()).rejects.toThrow(PagerDutyError);
+    }, 15000);
   });
 
   describe('getUserDetails', () => {
@@ -106,21 +98,17 @@ describe('PagerDutyService', () => {
       expect(result.email).toBe('john.doe@example.com');
     });
 
-    it(
-      'should throw error when user not found',
-      async () => {
-        nock('https://api.pagerduty.com')
-          .get('/users/INVALID')
-          .query(true)
-          .times(4)
-          .reply(404, {
-            error: { message: 'User not found' },
-          });
+    it('should throw error when user not found', async () => {
+      nock('https://api.pagerduty.com')
+        .get('/users/INVALID')
+        .query(true)
+        .times(4)
+        .reply(404, {
+          error: { message: 'User not found' },
+        });
 
-        await expect(service.getUserDetails('INVALID')).rejects.toThrow(PagerDutyError);
-      },
-      15000,
-    );
+      await expect(service.getUserDetails('INVALID')).rejects.toThrow(PagerDutyError);
+    }, 15000);
   });
 
   describe('testConnection', () => {

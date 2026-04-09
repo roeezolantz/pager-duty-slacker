@@ -1,11 +1,7 @@
 import { OnCallService } from '../../src/services/oncall.service';
 import { PagerDutyService } from '../../src/services/pagerduty.service';
 import { SlackService } from '../../src/services/slack.service';
-import {
-  mockConfig,
-  mockPagerDutyUser,
-  mockPagerDutyScheduleEntry,
-} from '../fixtures/mock-data';
+import { mockConfig, mockPagerDutyUser, mockPagerDutyScheduleEntry } from '../fixtures/mock-data';
 
 jest.mock('../../src/services/pagerduty.service');
 jest.mock('../../src/services/slack.service');

@@ -50,12 +50,7 @@ export class SlackService {
       const slackUserId = await this.getSlackUserIdByEmail(email);
       const slackHandle = slackUserId ? `<@${slackUserId}>` : undefined;
 
-      const message = this.formatOnCallMessage(
-        name,
-        slackHandle,
-        scheduleStart,
-        scheduleEnd,
-      );
+      const message = this.formatOnCallMessage(name, slackHandle, scheduleStart, scheduleEnd);
 
       const result = (await this.postMessageBreaker.fire(
         message,
@@ -155,9 +150,7 @@ export class SlackService {
         return { success: false, error: 'Failed to list usergroups' };
       }
 
-      const oncallGroup = usergroupsResponse.usergroups.find(
-        (group) => group.handle === 'oncall',
-      );
+      const oncallGroup = usergroupsResponse.usergroups.find((group) => group.handle === 'oncall');
 
       if (!oncallGroup?.id) {
         log.warn('Could not find @oncall usergroup - please create it first');
@@ -216,7 +209,7 @@ export class SlackService {
             log.warn('User not found in Slack', {
               email,
               error: response.error,
-              responseOk: response.ok
+              responseOk: response.ok,
             });
             return undefined;
           }
@@ -229,7 +222,7 @@ export class SlackService {
     } catch (error) {
       log.warn('Error looking up user by email', {
         email,
-        error: error instanceof Error ? error.message : String(error)
+        error: error instanceof Error ? error.message : String(error),
       });
       return undefined;
     }
@@ -271,10 +264,14 @@ Shift: ${formatDate(scheduleStart)} - ${formatDate(scheduleEnd)}`;
   private getOrdinalSuffix(day: number): string {
     if (day > 3 && day < 21) return 'th';
     switch (day % 10) {
-      case 1: return 'st';
-      case 2: return 'nd';
-      case 3: return 'rd';
-      default: return 'th';
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
     }
   }
 

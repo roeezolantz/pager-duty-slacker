@@ -37,7 +37,8 @@ describe('SlackService', () => {
               update: mockUsergroupsUsersUpdate,
             },
           },
-        }) as unknown,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        }) as any,
     );
 
     service = new SlackService(mockConfig);

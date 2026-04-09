@@ -40,10 +40,9 @@ export class PagerDutyService {
       },
     });
 
-    this.getScheduleBreaker = createCircuitBreaker(
-      this.getScheduleEntriesInternal.bind(this),
-      { name: 'pagerduty-get-schedule' },
-    );
+    this.getScheduleBreaker = createCircuitBreaker(this.getScheduleEntriesInternal.bind(this), {
+      name: 'pagerduty-get-schedule',
+    });
 
     this.getUserBreaker = createCircuitBreaker(this.getUserDetailsInternal.bind(this), {
       name: 'pagerduty-get-user',
@@ -173,18 +172,16 @@ export class PagerDutyService {
     return retryWithBackoff(
       async () => {
         // Use the schedule endpoint to get actual shift times
-        const response = await this.client.get(
-          `/schedules/${this.config.pagerduty.scheduleId}`,
-          {
-            params: {
-              since: startDate.toISOString(),
-              until: endDate.toISOString(),
-            },
+        const response = await this.client.get(`/schedules/${this.config.pagerduty.scheduleId}`, {
+          params: {
+            since: startDate.toISOString(),
+            until: endDate.toISOString(),
           },
-        );
+        });
 
-        const entries = response.data?.schedule?.final_schedule
-          ?.rendered_schedule_entries as PagerDutyScheduleEntry[] | undefined;
+        const entries = response.data?.schedule?.final_schedule?.rendered_schedule_entries as
+          | PagerDutyScheduleEntry[]
+          | undefined;
 
         if (!entries || entries.length === 0) {
           throw new PagerDutyError('No schedule entries found', 404);
