@@ -34,7 +34,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/roeezolantz/pd-slacker.git"
+    "url": "https://github.com/roeezolantz/pager-duty-slacker.git"
   },
   "engines": {
     "node": ">=20.0.0",

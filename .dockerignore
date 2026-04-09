@@ -9,7 +9,6 @@ README.md
 .eslintrc.js
 .prettierrc
 jest.config.js
-tsconfig.json
 tests
 docs
 infrastructure

@@ -1,23 +1,27 @@
 # Build stage
 FROM node:20-alpine AS builder
 
+RUN corepack enable
+
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json pnpm-lock.yaml ./
 COPY tsconfig.json ./
 
 # Install dependencies
-RUN npm ci
+RUN pnpm install --frozen-lockfile
 
 # Copy source code
 COPY src ./src
 
 # Build the application
-RUN npm run build
+RUN pnpm run build
 
 # Production stage
 FROM node:20-alpine
+
+RUN corepack enable
 
 WORKDIR /app
 
@@ -29,11 +33,10 @@ RUN addgroup -g 1001 -S nodejs && \
     adduser -S nodejs -u 1001
 
 # Copy package files
-COPY package*.json ./
+COPY package.json pnpm-lock.yaml ./
 
 # Install production dependencies only
-RUN npm ci --only=production && \
-    npm cache clean --force
+RUN pnpm install --prod --frozen-lockfile
 
 # Copy built application from builder
 COPY --from=builder /app/dist ./dist
