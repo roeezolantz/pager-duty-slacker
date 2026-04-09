@@ -16,6 +16,7 @@ const app: Express = express();
 let onCallService: OnCallService | null = null;
 let config: Config | null = null;
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageJson = require('../package.json');
 const APP_VERSION = packageJson.version;
 

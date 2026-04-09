@@ -18,10 +18,19 @@ COPY src ./src
 # Build the application
 RUN pnpm run build
 
-# Production stage
-FROM node:20-alpine
+# Production dependencies stage
+FROM node:20-alpine AS deps
 
 RUN corepack enable
+
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml ./
+
+RUN pnpm install --prod --frozen-lockfile
+
+# Production stage
+FROM node:20-alpine
 
 WORKDIR /app
 
@@ -32,11 +41,8 @@ RUN apk add --no-cache dumb-init
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nodejs -u 1001
 
-# Copy package files
-COPY package.json pnpm-lock.yaml ./
-
-# Install production dependencies only
-RUN pnpm install --prod
+# Copy production dependencies from deps stage
+COPY --from=deps /app/node_modules ./node_modules
 
 # Copy built application from builder
 COPY --from=builder /app/dist ./dist

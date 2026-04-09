@@ -37,7 +37,7 @@ describe('SlackService', () => {
               update: mockUsergroupsUsersUpdate,
             },
           },
-        }) as any,
+        }) as unknown,
     );
 
     service = new SlackService(mockConfig);

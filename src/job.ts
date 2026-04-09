@@ -8,6 +8,7 @@ import { OnCallService } from './services/oncall.service';
 import { createLogger } from './utils/logger';
 
 const logger = createLogger({ service: 'job' });
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageJson = require('../package.json');
 const APP_VERSION = packageJson.version;
 
